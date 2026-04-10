@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Satoshi', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --color-bg: #07060e;
+  --color-bg-surface: #1a1a2e;
+  --color-bg-bubble-agent: #1a1a2e;
+  --color-bg-bubble-user: #2d2d44;
+  --color-accent: #8b5cf6;
+  --color-accent-glow: #8b5cf680;
+  --color-accent-cyan: #22d3ee;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #71717a;
+  --color-border: #333333;
+  --color-border-accent: #8b5cf6;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1a1a2e transparent;
+}
+
+body {
+  margin: 0;
+}
+
+/* --- Animations --- */
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dot-bounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-4px); }
+  30% { transform: translateX(4px); }
+  45% { transform: translateX(-3px); }
+  60% { transform: translateX(3px); }
+  75% { transform: translateX(-2px); }
+  90% { transform: translateX(2px); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 200ms ease-out both;
+}
+
+.animate-dot-bounce {
+  animation: dot-bounce 1.4s ease-in-out infinite;
+}
+
+.animate-shake {
+  animation: shake 400ms ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 200ms ease-out both;
+}
