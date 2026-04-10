@@ -152,13 +152,35 @@ const questionnaireA: Questionnaire = [
       { label: 'Non-binaire', value: 'non_binaire' },
       { label: 'Préfère ne pas dire', value: 'prefere_pas_dire' },
     ],
-    next: 'A8',
+    next: 'A7c',
     dataKey: 'genre',
+  },
+  {
+    id: 'A7c',
+    messages: [
+      'Comment tu t\'appelles ?',
+    ],
+    inputType: 'text',
+    minTextLength: 2,
+    relanceMessage: 'Juste ton prénom !',
+    next: 'A7d',
+    dataKey: 'prenom',
+  },
+  {
+    id: 'A7d',
+    messages: [
+      'Et ton email ? C\'est pour te recontacter si tu gagnes les places 🎟️',
+    ],
+    inputType: 'text',
+    inputMode: 'email',
+    relanceMessage: 'J\'ai besoin d\'un email valide pour le tirage 📧',
+    next: 'A8',
+    dataKey: 'email',
   },
   {
     id: 'A8',
     messages: [
-      'C\'est bon t\'es inscrit·e au tirage pour {{EVENT_NAME}} ! 🎉',
+      'C\'est bon {{prenom}}, t\'es inscrit·e au tirage pour {{EVENT_NAME}} ! 🎉',
       'Le tirage a lieu le {{DRAW_DATE}}, je te recontacte ici si t\'as gagné.',
       'En attendant, si tu veux tester le chatbot OnParty pour tes prochaines sorties, tu peux lui demander ce que tu veux — genre "quoi faire ce samedi à Paris" ou "c\'est quoi le dress code pour [CLUB]"',
       'Bonne soirée ! 🌙',

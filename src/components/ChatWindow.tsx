@@ -79,9 +79,10 @@ export default function ChatWindow({
           )}
           {currentInput.type === 'text' && (
             <TextInput
-              key={`text-${currentInput.minTextLength}-${currentInput.relanceMessage}`}
+              key={`text-${currentInput.minTextLength}-${currentInput.relanceMessage}-${currentInput.inputMode}`}
               minLength={currentInput.minTextLength}
               relanceMessage={currentInput.relanceMessage}
+              inputMode={currentInput.inputMode}
               onSubmit={(text) => sendResponse(text)}
             />
           )}

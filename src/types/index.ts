@@ -33,6 +33,7 @@ export interface ChatNode {
   maxSelections?: number;
   minTextLength?: number;
   relanceMessage?: string;
+  inputMode?: 'text' | 'email';
   next: string | ((response: UserResponse) => string);
   dataKey: string;
 }
@@ -80,4 +81,5 @@ export interface CurrentInput {
   maxSelections?: number;
   minTextLength?: number;
   relanceMessage?: string;
+  inputMode?: 'text' | 'email';
 }

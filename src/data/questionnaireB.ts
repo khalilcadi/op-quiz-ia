@@ -136,13 +136,35 @@ const questionnaireB: Questionnaire = [
       { label: 'Non-binaire', value: 'non_binaire' },
       { label: 'Préfère ne pas dire', value: 'prefere_pas_dire' },
     ],
-    next: 'B6',
+    next: 'B5c',
     dataKey: 'genre',
+  },
+  {
+    id: 'B5c',
+    messages: [
+      'Comment tu t\'appelles ?',
+    ],
+    inputType: 'text',
+    minTextLength: 2,
+    relanceMessage: 'Juste ton prénom !',
+    next: 'B5d',
+    dataKey: 'prenom',
+  },
+  {
+    id: 'B5d',
+    messages: [
+      'Et ton email pour le tirage ? 🎟️',
+    ],
+    inputType: 'text',
+    inputMode: 'email',
+    relanceMessage: 'J\'ai besoin d\'un email valide pour le tirage 📧',
+    next: 'B6',
+    dataKey: 'email',
   },
   {
     id: 'B6',
     messages: [
-      'C\'est bon, t\'es dans le tirage pour {{EVENT_NAME}} 🎉',
+      'C\'est bon {{prenom}}, t\'es dans le tirage pour {{EVENT_NAME}} 🎉',
       'Résultat le {{DRAW_DATE}} — je te recontacte ici.',
       'D\'ici là, tu peux tester le chatbot OnParty : demande-lui "quoi faire ce week-end à Paris" et vois ce qu\'il te propose 😏',
     ],

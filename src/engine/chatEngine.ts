@@ -384,6 +384,7 @@ export function useChat(
           maxSelections: currentNode.maxSelections,
           minTextLength: currentNode.minTextLength,
           relanceMessage: currentNode.relanceMessage,
+          inputMode: currentNode.inputMode,
         }
       : null;
 

@@ -16,7 +16,7 @@ function makeResponse(nodeId: string, dataKey: string, value: string | string[])
 describe('Questionnaire A — node structure', () => {
   it('has all expected node IDs', () => {
     const ids = questionnaireA.map((n) => n.id);
-    expect(ids).toEqual(['A0', 'A1', 'A2', 'A3', 'A4a', 'A4b', 'A5', 'A6', 'A6b', 'A7', 'A7b', 'A8']);
+    expect(ids).toEqual(['A0', 'A1', 'A2', 'A3', 'A4a', 'A4b', 'A5', 'A6', 'A6b', 'A7', 'A7b', 'A7c', 'A7d', 'A8']);
   });
 
   it('every node has at least one message', () => {
@@ -51,7 +51,7 @@ describe('Questionnaire A — node structure', () => {
 describe('Questionnaire B — node structure', () => {
   it('has all expected node IDs', () => {
     const ids = questionnaireB.map((n) => n.id);
-    expect(ids).toEqual(['B0', 'B1a', 'B1b', 'B2', 'B3', 'B4', 'B5a', 'B5b', 'B6']);
+    expect(ids).toEqual(['B0', 'B1a', 'B1b', 'B2', 'B3', 'B4', 'B5a', 'B5b', 'B5c', 'B5d', 'B6']);
   });
 });
 
@@ -185,10 +185,9 @@ describe('Multi-select constraints', () => {
 // ---------------------------------------------------------------------------
 
 describe('Progress calculation', () => {
-  it('questionnaire A shortest path has 10 answerable nodes (skips A6b)', () => {
-    // Shortest path: A0 A1 A2 A3 A4a A4b A5 A6 A7 A7b = 10
-    // (A8 is inputType 'none', A6b is skipped)
-    // We test by walking the tree with an option that skips A6b
+  it('questionnaire A shortest path has 12 answerable nodes (skips A6b)', () => {
+    // Shortest: A0 A1 A2 A3 A4a A4b A5 A6 A7 A7b A7c A7d = 12
+    // (A8 is 'none', A6b is skipped)
     let count = 0;
     let currentId: string | null = 'A0';
     const visited = new Set<string>();
@@ -203,15 +202,14 @@ describe('Progress calculation', () => {
       if (typeof node.next === 'string') {
         currentId = node.next || null;
       } else {
-        // Use "pas_vraiment" to skip A6b
         currentId = node.next(makeResponse(node.id, node.dataKey, 'pas_vraiment'));
       }
     }
 
-    expect(count).toBe(10);
+    expect(count).toBe(12);
   });
 
-  it('questionnaire A longest path has 11 answerable nodes (includes A6b)', () => {
+  it('questionnaire A longest path has 13 answerable nodes (includes A6b)', () => {
     let count = 0;
     let currentId: string | null = 'A0';
     const visited = new Set<string>();
@@ -226,30 +224,28 @@ describe('Progress calculation', () => {
       if (typeof node.next === 'string') {
         currentId = node.next || null;
       } else {
-        // Use "oui_clairement" to include A6b
         currentId = node.next(makeResponse(node.id, node.dataKey, 'oui_clairement'));
       }
     }
 
-    expect(count).toBe(11);
+    expect(count).toBe(13);
   });
 
-  it('countShortestPath returns 10 for questionnaire A (skips A6b)', () => {
-    expect(countShortestPath(questionnaireA)).toBe(10);
+  it('countShortestPath returns 12 for questionnaire A (skips A6b, includes prenom+email)', () => {
+    expect(countShortestPath(questionnaireA)).toBe(12);
   });
 
-  it('countShortestPath returns 8 for questionnaire B (no branches)', () => {
-    expect(countShortestPath(questionnaireB)).toBe(8);
+  it('countShortestPath returns 10 for questionnaire B (includes prenom+email)', () => {
+    expect(countShortestPath(questionnaireB)).toBe(10);
   });
 
-  it('questionnaire B has 8 answerable nodes', () => {
-    // B0(buttons) B1a(buttons) B1b(multi) B2(multi) B3(buttons) B4(buttons) B5a(buttons) B5b(buttons) = 8
-    // B6 = none
+  it('questionnaire B has 10 answerable nodes', () => {
+    // B0 B1a B1b B2 B3 B4 B5a B5b B5c B5d = 10 (B6 = none)
     let count = 0;
     for (const node of questionnaireB) {
       if (node.inputType !== 'none') count++;
     }
-    expect(count).toBe(8);
+    expect(count).toBe(10);
   });
 });
 
@@ -357,7 +353,55 @@ describe('Full walk-through reachability', () => {
 });
 
 // ---------------------------------------------------------------------------
-// 9. ButtonOption value/label consistency
+// 9. Prénom + email nodes
+// ---------------------------------------------------------------------------
+
+describe('Prénom + email inscription', () => {
+  it('A7c collects prénom (text, minLength 2)', () => {
+    const node = getNodeById(questionnaireA, 'A7c')!;
+    expect(node.inputType).toBe('text');
+    expect(node.minTextLength).toBe(2);
+    expect(node.dataKey).toBe('prenom');
+    expect(node.next).toBe('A7d');
+  });
+
+  it('A7d collects email (text, inputMode email)', () => {
+    const node = getNodeById(questionnaireA, 'A7d')!;
+    expect(node.inputType).toBe('text');
+    expect(node.inputMode).toBe('email');
+    expect(node.dataKey).toBe('email');
+    expect(node.next).toBe('A8');
+  });
+
+  it('B5c collects prénom', () => {
+    const node = getNodeById(questionnaireB, 'B5c')!;
+    expect(node.inputType).toBe('text');
+    expect(node.dataKey).toBe('prenom');
+    expect(node.next).toBe('B5d');
+  });
+
+  it('B5d collects email', () => {
+    const node = getNodeById(questionnaireB, 'B5d')!;
+    expect(node.inputMode).toBe('email');
+    expect(node.dataKey).toBe('email');
+    expect(node.next).toBe('B6');
+  });
+
+  it('A8 closing message uses {{prenom}} placeholder', () => {
+    const node = getNodeById(questionnaireA, 'A8')!;
+    const msgs = typeof node.messages === 'function' ? node.messages([]) : node.messages;
+    expect(msgs[0]).toContain('{{prenom}}');
+  });
+
+  it('B6 closing message uses {{prenom}} placeholder', () => {
+    const node = getNodeById(questionnaireB, 'B6')!;
+    const msgs = typeof node.messages === 'function' ? node.messages([]) : node.messages;
+    expect(msgs[0]).toContain('{{prenom}}');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 10. ButtonOption value/label consistency
 // ---------------------------------------------------------------------------
 
 describe('ButtonOption consistency', () => {
