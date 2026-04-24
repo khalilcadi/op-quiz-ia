@@ -4,11 +4,23 @@ import ChatWindow from './components/ChatWindow';
 import { getSessions, exportJSON, exportCSV, clearSessions } from './engine/responseStore';
 import questionnaireA from './data/questionnaireA';
 import questionnaireB from './data/questionnaireB';
+import questionnaireA_brunch from './data/questionnaireA_brunch';
+import questionnaireB_brunch from './data/questionnaireB_brunch';
+import type { Questionnaire } from './types';
 
 const events: EventConfig[] = [
   { id: 'cercle-festival', name: 'Cercle Festival', date: '22 mai 2026', drawDate: '18 mai 2026', emoji: '🎪' },
-  { id: 'brunch-solomun', name: 'Brunch Électronique × Solomun', date: '13 juin 2026', drawDate: '9 juin 2026', emoji: '🎶' },
+  { id: 'brunch-solomun', name: 'Brunch Électronique × Solomun', date: '13 juin 2026', drawDate: '11 juin 2026', emoji: '🎶' },
 ];
+
+const questionnairesByEvent: Record<string, { A: Questionnaire; B: Questionnaire }> = {
+  'cercle-festival': { A: questionnaireA, B: questionnaireB },
+  'brunch-solomun': { A: questionnaireA_brunch, B: questionnaireB_brunch },
+};
+
+function getQuestionnaire(eventId: string, variant: 'A' | 'B'): Questionnaire {
+  return questionnairesByEvent[eventId]?.[variant] ?? (variant === 'A' ? questionnaireA : questionnaireB);
+}
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('home');
@@ -25,7 +37,7 @@ export default function App() {
     return (
       <ChatWindow
         key={`${activeEvent.id}-${variant}-${Date.now()}`}
-        questionnaire={variant === 'A' ? questionnaireA : questionnaireB}
+        questionnaire={getQuestionnaire(activeEvent.id, variant)}
         eventConfig={activeEvent}
         variant={variant}
         onComplete={() => setScreen('home')}
