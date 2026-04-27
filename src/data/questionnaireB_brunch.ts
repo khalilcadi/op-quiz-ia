@@ -49,7 +49,7 @@ const questionnaireB_brunch: Questionnaire = [
   {
     id: 'B3',
     messages: [
-      'Qu\'est-ce qui te ferait revenir chaque semaine ?',
+      'Qu\'est-ce qui te ferait revenir sur OnParty chaque semaine ?',
       'Choisis les 2 qui te parlent le plus :',
     ],
     inputType: 'multi_select',
@@ -84,7 +84,7 @@ const questionnaireB_brunch: Questionnaire = [
   {
     id: 'B5',
     messages: [
-      'Dernière question cœur 💸',
+      'Et pour finir',
       'Si OnParty te trouvait chaque semaine le plan parfait + guest list + le bon crew, tu paierais combien ?',
     ],
     inputType: 'buttons',
