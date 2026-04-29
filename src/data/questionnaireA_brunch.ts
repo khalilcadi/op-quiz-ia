@@ -34,24 +34,24 @@ const questionnaireA_brunch: Questionnaire = [
   {
     id: 'A2',
     messages: [
-      "C'est quoi le plus galère quand tu organises une sortie avec tes potes ?",
-    ],
-    inputType: 'text',
-    minTextLength: 10,
-    relanceMessage: 'Allez 2 phrases, même vite fait — ça m\'intéresse vraiment 😄',
-    next: 'A3',
-    dataKey: 'group_frustration',
-  },
-  {
-    id: 'A3',
-    messages: [
-      'Imagine que tu vois en temps réel qui va à quelle soirée ce soir — tes potes, mais aussi des gens avec les mêmes goûts que toi. Ça changerait quoi pour toi ?',
+      'Si tu pouvais voir en temps réel qui va où ce soir — tes potes, des gens que tu connais — ça te motiverait à sortir ?',
     ],
     inputType: 'text',
     minTextLength: 10,
     relanceMessage: 'Sois honnête — ça t\'intéresse, ça t\'inquiète ? 👀',
-    next: 'A4',
+    next: 'A3',
     dataKey: 'realtime_social',
+  },
+  {
+    id: 'A3',
+    messages: [
+      "Au final, qu'est-ce qui te motiverait à sortir plus souvent ?",
+    ],
+    inputType: 'text',
+    minTextLength: 10,
+    relanceMessage: 'Allez dis-moi ce qui ferait vraiment la diff 😄',
+    next: 'A4',
+    dataKey: 'motivation_sortir',
   },
   {
     id: 'A4',
